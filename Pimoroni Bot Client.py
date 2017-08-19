@@ -6,7 +6,7 @@ import logging
 # ---Setup (Background Stuff)---
 
 
-logger = logging.getLogger('discord')
+logger = logging.getLogger('log')
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
@@ -22,6 +22,8 @@ client = discord.Client()
 async def on_message(message):
     if message.author == client.user:
         return
+    
+    author = message.author
 
     if message.content.startswith('?help'):
         await client.send_message(message.channel, """```
@@ -29,7 +31,7 @@ A good ol' Pimoroni Robot (Pirated, of course)
 
 Please Note:
 
-    Since this bot is writton in Python, all commands including a "space" within a single argument must be enclosed in quotation marks, "like so",
+    Since this bot runs in Python, all commands including a "space" within a single argument must be enclosed in quotation marks "like so",
     All command words must be preceded with a "?" token,
     And all commands are case sensitive!
 
@@ -47,55 +49,38 @@ Restricted Commands (Non-Member Users):
 ```""")
 
 
-# None-priveleged Utilities
+# ---None-priveleged Commands---
 
 
-#HELLO
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    
-    if message.content.startswith('?hello'):
-        author = message.author
-        await client.send_message(message.channel, "Hello there {}!".format(author))
+    #HELLO
+    elif message.content.startswith('?hello'):
+        await client.send_message(message.channel, "Greetings {}!".format(author))
         
-#JOINED
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    
-    if message.content.startswith("?joined"):
+    #GOODBYE
+    elif message.content.startswith('?goodbye'):
+        await client.send_message(message.channel, "Tata {}!".format(author))
+
+        
+    #JOINED
+    elif message.content.startswith("?joined"):
         msg = message.content
         words = msg.split()
         words.remove("?joined")
         for word in words:
             date = discord.Member.joined_at
             await client.send_message(message.channel, "Sorry, this function is not yet complete!")
+
             
-#ROLL
-@client.event
-async def roller(message):
-    if message.author == client.user:
-        return
-    
-    if message.content.startswith("?roll"):
+    #ROLE
+    elif message.content.startswith("?roll"):
         roll = str(random.randint(1, 6))
         await client.send_message(message.channel, "{} rolled!".format(roll))
-        return
-    return
 
-# Priveleged Utilities
+# ---Priveleged Commands---
 
 
-#SAY
-@client.event
-async def sayer(message):
-    if message.author == client.user:
-        return
-    
-    if message.content.startswith("?say"):
+    #SAY
+    elif message.content.startswith("?say"):
         msg = message.content
         words = msg.split()
         words.remove("?say")
@@ -116,8 +101,6 @@ async def sayer(message):
         await client.send_message(message.channel, "Sorry, this function is not yet complete!")
 
 
-
-
 # ------------Final Run (Don't put code after this!)------------
 
 
@@ -128,5 +111,5 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.run('token')
+client.run('MzQ4MTczMjI1MTg5OTY1ODM1.DHjHrQ.bzmQ3l5UV87a5S-Y9dHtVRbURXs')
 
